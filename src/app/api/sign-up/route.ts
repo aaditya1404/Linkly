@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { sendVerificationEmail } from "@/helperFunctions/sendVerificationEmail";
 
 export async function POST(request: NextRequest) {
     try {
@@ -60,6 +61,15 @@ export async function POST(request: NextRequest) {
                     verifyCodeExpiry: expiryDate
                 }
             });
+
+            const verificationEmailResponse = await sendVerificationEmail(userName, userEmail, verifyCode);
+            if (!verificationEmailResponse.success) {
+                return NextResponse.json({
+                    success: false,
+                    message: verificationEmailResponse.message
+                }, { status: 500 });
+            }
+
             return NextResponse.json({
                 success: true,
                 message: "New User Created",
