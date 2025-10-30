@@ -1,7 +1,6 @@
 import { render } from "@react-email/components";
 import VerificationEmail from "../../emails/VerificationEmail";
 import { transporter } from "@/lib/nodemailer";
-import { NextResponse } from "next/server";
 
 export async function sendVerificationEmail(userName: string, userEmail: string, verifyCode: string) {
     try {
